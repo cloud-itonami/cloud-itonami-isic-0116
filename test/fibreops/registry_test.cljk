@@ -1,5 +1,5 @@
 (ns fibreops.registry-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [fibreops.registry :as registry]))
 
 (deftest cost-exceeds-threshold-test
