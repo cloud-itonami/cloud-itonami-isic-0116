@@ -1,5 +1,5 @@
 (ns fibreops.phase-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [fibreops.phase :as phase]))
 
 (deftest verdict-to-disposition
