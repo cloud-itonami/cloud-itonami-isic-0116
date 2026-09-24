@@ -1,0 +1,31 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:dev:physics` runs it.
+;;
+;; README "Robotics premise": a field-management robot keeps field records,
+;; schedules field operations and handles supplies for a fibre-crop farm (ISIC
+;; 0116, e.g. cotton, jute, flax). Its physical work: carrying pressed fibre
+;; bales on raised forks to storage, and lifting fibre bundles into the baler.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isic-0116"
+ :cases
+ [{:id :fibre-bale-on-raised-forks
+   :kind :transport
+   :procedure "fork robot carries one pressed cotton bale to the bale store; the bale is lifted to stacking height while driving"
+   :params {:mass-kg 400.0 :payload-kg 227.0 :distance-m 60.0 :v-max-mps 1.5 :a-max-mps2 0.8
+            :brake-decel-mps2 2.0 :drive-force-n 1500.0 :crr 0.03
+            :cog-height-m 0.50 :support-half-length-m 0.60 :max-time-s 3600.0}
+   :sweep {:param :payload-cog-height-m :values [0.4 0.8 1.2 1.6 2.0]}
+   :quantity :min-tipover-margin
+   :limit {:min 0.30 :basis "estimate: keep at least 30 % of the longitudinal stability margin under a hard stop (bale mass ~227 kg is also an estimate)"}}
+  {:id :fibre-bundle-into-baler
+   :kind :manipulator
+   :procedure "arm lifts a bundle of retted fibre from the floor stack into the baler feed hopper"
+   :params {:l1-m 0.60 :l2-m 0.50 :m1-kg 7.0 :m2-kg 5.0
+            :from [0.70 -0.30] :to [0.30 0.80] :duration-s 2.5 :steps 500}
+   :sweep {:param :payload-kg :values [5.0 10.0 15.0 20.0 25.0]}
+   :quantity :peak-tau1-nm
+   :limit {:max 250.0 :basis "estimate: continuous shoulder torque of a 20 kg-class industrial arm"}
+   :boundary {:lo 1.0 :hi 80.0}}]}
